@@ -29,7 +29,7 @@ Hasil pengamatan:
 
 Kesimpulan: consumer group memungkinkan load balancing otomatis antar consumer, dimana setiap consumer bertanggung jawab atas partition tertentu saja.
 
-## 3. How to Run
+# How to Run
 
 ### Requirements
 - **Docker & Docker Compose** 
