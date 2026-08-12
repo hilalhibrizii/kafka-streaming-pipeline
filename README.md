@@ -32,7 +32,7 @@ Kesimpulan: consumer group memungkinkan load balancing otomatis antar consumer, 
 ## 3. How to Run
 
 ### Requirements
-- **Docker & Docker Compose** (for Kafka Broker)
+- **Docker & Docker Compose** 
 - **Python 3.12+** (virtual environment recommended)
 
 ### Setup & Execution
