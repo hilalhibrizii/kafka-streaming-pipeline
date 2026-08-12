@@ -28,3 +28,39 @@ Hasil pengamatan:
 - Ketika salah satu consumer dimatikan, Kafka melakukan rebalance lagi dan partition yang ditinggalkan akan diambil alih oleh consumer yang masih aktif.
 
 Kesimpulan: consumer group memungkinkan load balancing otomatis antar consumer, dimana setiap consumer bertanggung jawab atas partition tertentu saja.
+
+## 3. Cara Menjalankan Project
+
+Jika Anda ingin mencoba menjalankan pipeline ini di lokal Anda, ikuti langkah berikut:
+
+### Prasyarat
+- Docker & Docker Compose sudah terinstall.
+- Python 3.12+ (disarankan menggunakan *virtual environment*).
+
+### Langkah-langkah
+1. **Jalankan Kafka Cluster (via Docker):**
+   ```bash
+   docker-compose up -d
+   ```
+   Tunggu sekitar 10 detik agar Kafka broker siap beroperasi.
+
+2. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Jalankan Producer (Terminal 1):**
+   ```bash
+   python producer.py
+   ```
+   Producer akan mulai mengirim data transaksi JSON setiap 5 detik.
+
+4. **Jalankan Consumer (Terminal 2 & 3):**
+   Buka dua terminal baru, lalu jalankan perintah ini di **masing-masing terminal**:
+   ```bash
+   python consumer.py
+   ```
+   Anda akan melihat kedua consumer bekerja berdampingan dan berbagi beban partisi berkat fitur *Consumer Group*.
+
+5. **Cek Hasil di Database:**
+   Proses di atas akan otomatis membuat dan mengisi file `events_sink.db`. Anda bisa membukanya menggunakan aplikasi seperti DBeaver atau SQLite Viewer untuk melihat hasil agregasinya.
