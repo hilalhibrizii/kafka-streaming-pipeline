@@ -31,23 +31,19 @@ Kesimpulan: consumer group memungkinkan load balancing otomatis antar consumer, 
 
 ## 3. How to Run
 
-Jika Anda ingin mencoba menjalankan pipeline ini di mesin lokal, silakan ikuti langkah-langkah berikut:
-
 ### Requirements
-- **Docker & Docker Compose** (untuk menjalankan Kafka broker)
-- **Python 3.12+** (disarankan menggunakan *virtual environment*)
+- **Docker & Docker Compose** (for Kafka Broker)
+- **Python 3.12+** (virtual environment recommended)
 
 ### Setup & Execution
 
 1. **Start Kafka Cluster:**
-   Jalankan Kafka broker menggunakan Docker Compose.
    ```bash
    docker-compose up -d
    ```
-   *Tunggu sekitar 10 detik agar broker sepenuhnya siap menerima koneksi.*
+   *Wait ~10 seconds for the broker to initialize.*
 
 2. **Install Dependencies:**
-   Install library Python yang dibutuhkan (`kafka-python-ng` dan `Faker`).
    ```bash
    pip install -r requirements.txt
    ```
@@ -56,14 +52,14 @@ Jika Anda ingin mencoba menjalankan pipeline ini di mesin lokal, silakan ikuti l
    ```bash
    python producer.py
    ```
-   Producer akan mulai melakukan *generate* data transaksi dummy (format JSON) menggunakan Faker, dan mengirimkannya ke Kafka setiap 5 detik. Biarkan proses ini berjalan.
+   *Generates dummy JSON transaction data via Faker and streams to Kafka every 5 seconds.*
 
 4. **Run Consumer Group (Terminal 2 & 3):**
-   Buka dua terminal baru, lalu jalankan perintah berikut di **masing-masing terminal**:
+   Open two new terminals and run the following command in **each terminal**:
    ```bash
    python consumer.py
    ```
-   Anda akan melihat kedua consumer melakukan proses *load balancing* berkat fitur **Consumer Group**. Satu consumer akan memproses data dari partisi 0, sementara yang lainnya memproses partisi 1.
+   *The two consumers will automatically load balance the partitions within the `assignment_group`.*
 
-5. **Verify Data Sink:**
-   Pipeline ini dikonfigurasi untuk menyimpan hasil agregasi secara otomatis ke dalam database SQLite lokal bernama `events_sink.db`. Buka file tersebut menggunakan tools seperti DBeaver atau SQLite Viewer untuk melihat ringkasan data (total events & total amount per user).
+5. **Data Sink Verification:**
+   The consumer pipeline automatically aggregates and writes the output to a local SQLite database (`events_sink.db`). Use DBeaver or any SQLite viewer to verify the `user_stats` table for event counts and total amounts.
