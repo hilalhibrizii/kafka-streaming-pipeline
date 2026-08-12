@@ -29,41 +29,41 @@ Hasil pengamatan:
 
 Kesimpulan: consumer group memungkinkan load balancing otomatis antar consumer, dimana setiap consumer bertanggung jawab atas partition tertentu saja.
 
-## 🚀 How to Run (Cara Menjalankan Project)
+## 3. How to Run
 
-Mau cobain pipeline ini di lokal? Kuy, gampang banget! Tinggal ikutin step-step di bawah ini:
+Jika Anda ingin mencoba menjalankan pipeline ini di mesin lokal, silakan ikuti langkah-langkah berikut:
 
-### 🛠️ Prasyarat (Tech Stack)
-- **Docker & Docker Compose** (buat nge-spin up Kafka cluster-nya)
-- **Python 3.12+** (disarankan pakai virtual environment biar rapi)
+### Requirements
+- **Docker & Docker Compose** (untuk menjalankan Kafka broker)
+- **Python 3.12+** (disarankan menggunakan *virtual environment*)
 
-### 🏃‍♂️ Langkah-langkah (Let's Go!)
+### Setup & Execution
 
-1. **Spin up Kafka Cluster:**
-   Nyalakan mesin utamanya (Kafka broker) via Docker.
+1. **Start Kafka Cluster:**
+   Jalankan Kafka broker menggunakan Docker Compose.
    ```bash
    docker-compose up -d
    ```
-   *Tunggu sekitar 10 detikan ya biar brokernya ready 100%.*
+   *Tunggu sekitar 10 detik agar broker sepenuhnya siap menerima koneksi.*
 
 2. **Install Dependencies:**
-   Install library yang dibutuhin, khususnya `kafka-python-ng` dan `Faker`.
+   Install library Python yang dibutuhkan (`kafka-python-ng` dan `Faker`).
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Nyalakan Producer (Terminal 1):**
+3. **Run Producer (Terminal 1):**
    ```bash
    python producer.py
    ```
-   *Bumm!* Producer bakal otomatis nge-generate data transaksi dummy (JSON) pakai Faker dan ngirim datanya ke Kafka setiap 5 detik. Biarin aja terminal ini jalan.
+   Producer akan mulai melakukan *generate* data transaksi dummy (format JSON) menggunakan Faker, dan mengirimkannya ke Kafka setiap 5 detik. Biarkan proses ini berjalan.
 
-4. **Nyalakan Consumer Group (Terminal 2 & 3):**
-   Buka dua tab/terminal baru, dan ketik perintah ini di **masing-masing terminal**:
+4. **Run Consumer Group (Terminal 2 & 3):**
+   Buka dua terminal baru, lalu jalankan perintah berikut di **masing-masing terminal**:
    ```bash
    python consumer.py
    ```
-   Nanti kamu bakal liat *magic*-nya Kafka: kedua consumer ini bakal otomatis berbagi tugas (load balancing) berkat fitur **Consumer Group**. Satu consumer bakal handle partisi 0, satunya lagi handle partisi 1.
+   Anda akan melihat kedua consumer melakukan proses *load balancing* berkat fitur **Consumer Group**. Satu consumer akan memproses data dari partisi 0, sementara yang lainnya memproses partisi 1.
 
-5. **Cek Hasil Akhir (Data Sink):**
-   Pipeline ini otomatis bikin dan ngisi database SQLite lokal bernama `events_sink.db`. Buka file `.db` ini pakai DBeaver atau SQLite Viewer buat ngecek hasil agregasinya (total event dan total amount per user). Selesai deh! 🎉
+5. **Verify Data Sink:**
+   Pipeline ini dikonfigurasi untuk menyimpan hasil agregasi secara otomatis ke dalam database SQLite lokal bernama `events_sink.db`. Buka file tersebut menggunakan tools seperti DBeaver atau SQLite Viewer untuk melihat ringkasan data (total events & total amount per user).
